@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PCT Antibiotic Stewardship</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3450;
+    --text: #e2e8f0;
+    --muted: #8892b0;
+    --accent: #7c6af7;
+    --red: #f87171;
+    --green: #34d399;
+    --yellow: #fbbf24;
+    --orange: #fb923c;
+    --blue: #60a5fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.6; }
+  .container { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+  h1 { font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .subtitle { color: var(--muted); margin-bottom: 28px; font-size: 0.9rem; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  .card-title { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 14px; }
+  .hero-field { text-align: center; padding: 16px 0 8px; }
+  .hero-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; }
+  .hero-input { font-size: 3rem; font-weight: 700; background: transparent; border: none; border-bottom: 3px solid var(--accent); color: #fff; text-align: center; width: 200px; outline: none; padding: 4px 8px; }
+  .hero-unit { font-size: 1rem; color: var(--muted); margin-top: 4px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  label { display: block; color: var(--muted); font-size: 0.78rem; margin-bottom: 4px; }
+  input[type=number], input[type=text], select, textarea {
+    width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); padding: 8px 10px; font-size: 0.9rem; outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  textarea { resize: vertical; min-height: 80px; }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-label { font-size: 0.88rem; }
+  .toggle-label small { display: block; color: var(--muted); font-size: 0.75rem; }
+  .toggle { position: relative; width: 40px; height: 22px; flex-shrink: 0; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; inset: 0; background: var(--border); border-radius: 22px; cursor: pointer; transition: 0.2s; }
+  .slider:before { content: ''; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: 0.2s; }
+  input:checked + .slider { background: var(--accent); }
+  input:checked + .slider:before { transform: translateX(18px); }
+  .serial-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .serial-row input { flex: 1; }
+  .btn-icon { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); border-radius: 6px; padding: 6px 10px; cursor: pointer; font-size: 1rem; }
+  .btn-icon:hover { color: var(--red); }
+  .btn-add { background: transparent; border: 1px dashed var(--border); color: var(--muted); border-radius: 6px; padding: 8px; width: 100%; cursor: pointer; font-size: 0.85rem; }
+  .btn-add:hover { border-color: var(--accent); color: var(--accent); }
+  .submit-btn { width: 100%; background: var(--accent); border: none; color: #fff; padding: 14px; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 8px; transition: opacity 0.2s; }
+  .submit-btn:hover { opacity: 0.85; }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Progress */
+  #progress { display: none; }
+  .agent-steps { display: flex; gap: 0; margin-bottom: 20px; }
+  .agent-step { flex: 1; text-align: center; padding: 12px 8px; background: var(--surface2); border: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); position: relative; }
+  .agent-step:first-child { border-radius: 8px 0 0 8px; }
+  .agent-step:last-child { border-radius: 0 8px 8px 0; }
+  .agent-step.active { background: #2a1f6e; border-color: var(--accent); color: var(--accent); }
+  .agent-step.done { background: #0f3d2b; border-color: var(--green); color: var(--green); }
+  .agent-step .step-name { font-weight: 600; }
+  .agent-step .step-desc { display: block; font-size: 0.72rem; margin-top: 2px; }
+  .progress-bar-wrap { background: var(--surface2); border-radius: 4px; height: 4px; margin-bottom: 12px; overflow: hidden; }
+  .progress-bar { height: 100%; background: var(--accent); width: 0; transition: width 12.5s linear; }
+  .progress-msg { text-align: center; color: var(--muted); font-size: 0.85rem; margin-bottom: 8px; }
+
+  /* Report */
+  #report { display: none; }
+  .reco-banner { border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; }
+  .reco-banner.start { background: linear-gradient(135deg, #7f1d1d, #991b1b); border: 1px solid #f87171; }
+  .reco-banner.withhold { background: linear-gradient(135deg, #064e3b, #065f46); border: 1px solid #34d399; }
+  .reco-banner.stop { background: linear-gradient(135deg, #064e3b, #065f46); border: 1px solid #34d399; }
+  .reco-banner.monitor { background: linear-gradient(135deg, #78350f, #92400e); border: 1px solid #fbbf24; }
+  .reco-banner.escalate { background: linear-gradient(135deg, #7c2d12, #9a3412); border: 1px solid #fb923c; }
+  .reco-banner.clinician_decision { background: linear-gradient(135deg, #1e3a5f, #1e40af); border: 1px solid #60a5fa; }
+  .reco-type { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.8; margin-bottom: 6px; }
+  .reco-text { font-size: 1.4rem; font-weight: 700; }
+  .reco-strength { font-size: 0.8rem; opacity: 0.75; margin-top: 4px; }
+  .section-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 8px; }
+  .report-text { line-height: 1.7; }
+  .warning-list { list-style: none; }
+  .warning-list li { padding: 7px 10px; margin-bottom: 6px; border-radius: 6px; background: #2d1b0a; border-left: 3px solid var(--yellow); font-size: 0.87rem; }
+  .override-list li { background: #2d0a0a; border-left-color: var(--red); }
+  .next-steps-list { list-style: none; counter-reset: steps; }
+  .next-steps-list li { counter-increment: steps; padding: 8px 12px; margin-bottom: 6px; background: var(--surface2); border-radius: 6px; display: flex; gap: 10px; font-size: 0.9rem; }
+  .next-steps-list li:before { content: counter(steps); background: var(--accent); color: #fff; width: 20px; height: 20px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .badge-gray-zone { display: inline-block; background: #78350f; color: var(--yellow); border-radius: 4px; padding: 2px 8px; font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; }
+  .badge-review { display: inline-block; background: #1e3a5f; color: var(--blue); border-radius: 4px; padding: 2px 8px; font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; margin-left: 6px; }
+  .disclaimer { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; font-size: 0.8rem; color: var(--muted); margin-top: 20px; }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; color: var(--muted); font-size: 0.85rem; padding: 8px 0; user-select: none; }
+  summary:hover { color: var(--text); }
+  .agent-block { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-top: 10px; }
+  .agent-block-title { font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; color: var(--accent); }
+  .agent-reasoning { font-size: 0.82rem; color: var(--muted); line-height: 1.6; white-space: pre-wrap; }
+  .error-banner { background: #2d0a0a; border: 1px solid var(--red); border-radius: 8px; padding: 16px; color: var(--red); margin-bottom: 16px; display: none; }
+  .field-group { margin-bottom: 12px; }
+  .inline-toggle { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .inline-toggle label { margin: 0; font-size: 0.85rem; color: var(--text); }
+  select option { background: var(--surface2); }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>PCT Antibiotic Stewardship</h1>
+  <p class="subtitle">B.R.A.H.M.S PCT-guided multi-agent decision support &mdash; for research use only</p>
+
+  <div id="error-banner" class="error-banner"></div>
+
+  <!-- FORM -->
+  <form id="form">
+
+    <!-- PCT VALUE -->
+    <div class="card">
+      <div class="hero-field">
+        <div class="hero-label">Procalcitonin (PCT)</div>
+        <input class="hero-input" type="number" id="pct_value" step="0.01" min="0" placeholder="0.00" required>
+        <div class="hero-unit">ng/mL</div>
+      </div>
+      <div class="field-group" style="margin-top:16px;">
+        <label>Clinical Setting</label>
+        <select id="clinical_setting" required>
+          <option value="lrti">LRTI — Lower Respiratory Tract Infection</option>
+          <option value="sepsis">Sepsis / Systemic Infection</option>
+          <option value="postop">Post-operative</option>
+          <option value="ed">Emergency Department</option>
+        </select>
+      </div>
+      <div class="grid2" style="margin-top:12px;">
+        <div>
+          <label>Symptom Onset (hours)</label>
+          <input type="number" id="symptom_onset_hours" min="0" placeholder="e.g. 48">
+        </div>
+        <div>
+          <div class="inline-toggle">
+            <div>
+              <div style="font-size:0.85rem;color:var(--text);">On Antibiotics</div>
+              <small style="color:var(--muted);font-size:0.75rem;">Currently receiving antibiotics</small>
+            </div>
+            <label class="toggle" style="margin-left:auto;">
+              <input type="checkbox" id="on_antibiotics" onchange="toggleAntibioticDay()">
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div id="antibiotic-day-wrap" style="display:none;margin-top:8px;">
+            <label>Antibiotic Day #</label>
+            <input type="number" id="antibiotic_day" min="1" placeholder="e.g. 4">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VITAL SIGNS -->
+    <div class="card">
+      <div class="card-title">Vital Signs</div>
+      <div class="grid3">
+        <div><label>Temperature (°C)</label><input type="number" id="temperature" step="0.1" placeholder="37.0"></div>
+        <div><label>Respiratory Rate (/min)</label><input type="number" id="respiratory_rate" placeholder="16"></div>
+        <div><label>Systolic BP (mmHg)</label><input type="number" id="systolic_bp" placeholder="120"></div>
+        <div><label>Heart Rate (bpm)</label><input type="number" id="heart_rate" placeholder="80"></div>
+        <div><label>GCS Score</label><input type="number" id="gcs_score" min="3" max="15" placeholder="15"></div>
+        <div><label>SpO2 (%)</label><input type="number" id="spo2" step="0.1" min="0" max="100" placeholder="98"></div>
+      </div>
+    </div>
+
+    <!-- LAB VALUES -->
+    <div class="card">
+      <div class="card-title">Laboratory Values</div>
+      <div class="grid3">
+        <div><label>CRP (mg/L)</label><input type="number" id="crp" step="0.1" placeholder="5.0"></div>
+        <div><label>WBC (×10⁹/L)</label><input type="number" id="wbc" step="0.1" placeholder="8.0"></div>
+        <div><label>Lactate (mmol/L)</label><input type="number" id="lactate" step="0.1" placeholder="1.0"></div>
+        <div><label>Creatinine (mg/dL)</label><input type="number" id="creatinine" step="0.1" placeholder="0.9"></div>
+        <div><label>Bilirubin (mg/dL)</label><input type="number" id="bilirubin" step="0.1" placeholder="0.8"></div>
+        <div><label>Platelets (×10⁹/L)</label><input type="number" id="platelets" placeholder="250"></div>
+      </div>
+    </div>
+
+    <!-- CLINICAL FLAGS -->
+    <div class="card">
+      <div class="card-title">Clinical Flags</div>
+      <div class="toggle-row">
+        <div class="toggle-label">Clinical Instability<small>Hypotension, altered consciousness, or respiratory failure</small></div>
+        <label class="toggle"><input type="checkbox" id="clinical_unstable"><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-label">High Risk Patient<small>Immunosuppressed, neutropenic, or asplenic</small></div>
+        <label class="toggle"><input type="checkbox" id="high_risk_patient"><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-label">Renal Failure<small>PCT may be falsely elevated due to reduced clearance</small></div>
+        <label class="toggle"><input type="checkbox" id="renal_failure"><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-label">Recent Surgery<small>Non-infectious PCT elevation expected 24-72h post-op</small></div>
+        <label class="toggle"><input type="checkbox" id="recent_surgery"><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-label">Burns / Trauma<small>Non-infectious PCT elevation expected</small></div>
+        <label class="toggle"><input type="checkbox" id="burns_trauma"><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-label">Immunosuppressed<small>PCT response may be blunted despite active infection</small></div>
+        <label class="toggle"><input type="checkbox" id="immunosuppressed"><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-label">Cardiac Failure<small>Mild PCT elevation possible without infection</small></div>
+        <label class="toggle"><input type="checkbox" id="cardiac_failure"><span class="slider"></span></label>
+      </div>
+    </div>
+
+    <!-- SERIAL PCT -->
+    <div class="card">
+      <div class="card-title">Serial PCT Measurements (optional)</div>
+      <div id="serial-pct-rows"></div>
+      <button type="button" class="btn-add" onclick="addSerialRow()">+ Add previous PCT measurement</button>
+    </div>
+
+    <!-- CLINICAL NOTES -->
+    <div class="card">
+      <div class="card-title">Clinical Notes</div>
+      <textarea id="clinical_notes" placeholder="Enter relevant clinical notes, suspected pathogens, relevant history..."></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn" id="submit-btn">Analyze with PCT Pipeline</button>
+  </form>
+
+  <!-- PROGRESS -->
+  <div id="progress" class="card" style="margin-top:20px;">
+    <div class="card-title">Pipeline Running</div>
+    <div class="agent-steps">
+      <div class="agent-step" id="step-a1"><span class="step-name">A1</span><span class="step-desc">Intake & Validation</span></div>
+      <div class="agent-step" id="step-a2"><span class="step-name">A2</span><span class="step-desc">Clinical Reasoning</span></div>
+      <div class="agent-step" id="step-a3"><span class="step-name">A3</span><span class="step-desc">Kinetic Analysis</span></div>
+      <div class="agent-step" id="step-a4"><span class="step-name">A4</span><span class="step-desc">Final Report</span></div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+    <div class="progress-msg" id="progress-msg">Initializing pipeline...</div>
+  </div>
+
+  <!-- REPORT -->
+  <div id="report" style="margin-top:20px;"></div>
+
+</div>
+
+<script>
+function toggleAntibioticDay() {
+  document.getElementById('antibiotic-day-wrap').style.display =
+    document.getElementById('on_antibiotics').checked ? 'block' : 'none';
+}
+
+let serialRows = [];
+function addSerialRow() {
+  const id = Date.now();
+  serialRows.push(id);
+  const div = document.createElement('div');
+  div.className = 'serial-row';
+  div.id = 'serial-' + id;
+  div.innerHTML = `
+    <div style="flex:0 0 80px;"><label style="margin-bottom:3px;">Day #</label><input type="number" id="sday-${id}" min="0" placeholder="1"></div>
+    <div style="flex:1"><label style="margin-bottom:3px;">PCT (ng/mL)</label><input type="number" id="sval-${id}" step="0.01" min="0" placeholder="0.00"></div>
+    <div style="flex:0 0 120px;"><label style="margin-bottom:3px;">Date (opt)</label><input type="text" id="sdate-${id}" placeholder="YYYY-MM-DD"></div>
+    <button type="button" class="btn-icon" onclick="removeSerialRow(${id})">×</button>`;
+  document.getElementById('serial-pct-rows').appendChild(div);
+}
+
+function removeSerialRow(id) {
+  const el = document.getElementById('serial-' + id);
+  if (el) el.remove();
+  serialRows = serialRows.filter(r => r !== id);
+}
+
+function getNum(id) {
+  const v = document.getElementById(id).value;
+  return v === '' ? null : parseFloat(v);
+}
+function getInt(id) {
+  const v = document.getElementById(id).value;
+  return v === '' ? null : parseInt(v);
+}
+function getBool(id) { return document.getElementById(id).checked; }
+
+function buildPayload() {
+  const payload = {
+    pct_value: getNum('pct_value'),
+    clinical_setting: document.getElementById('clinical_setting').value,
+    temperature: getNum('temperature'),
+    respiratory_rate: getInt('respiratory_rate'),
+    systolic_bp: getInt('systolic_bp'),
+    heart_rate: getInt('heart_rate'),
+    gcs_score: getInt('gcs_score'),
+    spo2: getNum('spo2'),
+    crp: getNum('crp'),
+    wbc: getNum('wbc'),
+    lactate: getNum('lactate'),
+    creatinine: getNum('creatinine'),
+    bilirubin: getNum('bilirubin'),
+    platelets: getInt('platelets'),
+    clinical_unstable: getBool('clinical_unstable'),
+    high_risk_patient: getBool('high_risk_patient'),
+    symptom_onset_hours: getInt('symptom_onset_hours'),
+    on_antibiotics: getBool('on_antibiotics'),
+    antibiotic_day: getBool('on_antibiotics') ? getInt('antibiotic_day') : null,
+    renal_failure: getBool('renal_failure'),
+    recent_surgery: getBool('recent_surgery'),
+    burns_trauma: getBool('burns_trauma'),
+    immunosuppressed: getBool('immunosuppressed'),
+    cardiac_failure: getBool('cardiac_failure'),
+    clinical_notes: document.getElementById('clinical_notes').value || null,
+  };
+
+  const prevPct = serialRows.map(id => ({
+    day: parseInt(document.getElementById('sday-' + id).value) || 0,
+    value: parseFloat(document.getElementById('sval-' + id).value) || 0,
+    date: document.getElementById('sdate-' + id).value || null,
+  })).filter(r => r.value > 0);
+  if (prevPct.length > 0) payload.previous_pct = prevPct;
+
+  return payload;
+}
+
+const stepLabels = ['A1: Intake & Validation', 'A2: Clinical Reasoning', 'A3: Kinetic Analysis', 'A4: Final Report'];
+const stepIds = ['step-a1', 'step-a2', 'step-a3', 'step-a4'];
+let progressTimer = null;
+let currentStep = 0;
+
+function startProgress() {
+  document.getElementById('progress').style.display = 'block';
+  document.getElementById('report').style.display = 'none';
+  document.getElementById('report').innerHTML = '';
+  currentStep = 0;
+  stepIds.forEach(id => document.getElementById(id).className = 'agent-step');
+  advanceStep();
+}
+
+function advanceStep() {
+  if (currentStep >= 4) return;
+  stepIds.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (i < currentStep) el.className = 'agent-step done';
+    else if (i === currentStep) el.className = 'agent-step active';
+    else el.className = 'agent-step';
+  });
+  const bar = document.getElementById('progress-bar');
+  bar.style.transition = 'none';
+  bar.style.width = (currentStep * 25) + '%';
+  requestAnimationFrame(() => {
+    bar.style.transition = 'width 12.5s linear';
+    bar.style.width = ((currentStep + 1) * 25) + '%';
+  });
+  document.getElementById('progress-msg').textContent = 'Running ' + stepLabels[currentStep] + '...';
+  currentStep++;
+  if (currentStep < 4) {
+    progressTimer = setTimeout(advanceStep, 12500);
+  }
+}
+
+function stopProgress() {
+  if (progressTimer) { clearTimeout(progressTimer); progressTimer = null; }
+  stepIds.forEach(id => { document.getElementById(id).className = 'agent-step done'; });
+  document.getElementById('progress-bar').style.width = '100%';
+  document.getElementById('progress-msg').textContent = 'Complete!';
+}
+
+function recoClass(rec) {
+  const map = { start: 'start', withhold: 'withhold', stop: 'stop', monitor: 'monitor', escalate: 'escalate', clinician_decision: 'clinician_decision' };
+  return map[rec] || 'clinician_decision';
+}
+
+function renderReport(data) {
+  document.getElementById('progress').style.display = 'none';
+  const rc = recoClass(data.recommendation);
+  let html = '';
+
+  // Badges
+  if (data.gray_zone) html += '<span class="badge-gray-zone">GRAY ZONE</span>';
+  if (data.clinician_review_required) html += '<span class="badge-review">CLINICIAN REVIEW REQUIRED</span>';
+  if (data.gray_zone || data.clinician_review_required) html += '<br style="margin-bottom:8px;">';
+
+  // Recommendation banner
+  html += `<div class="reco-banner ${rc}">
+    <div class="reco-type">Recommendation</div>
+    <div class="reco-text">${escHtml(data.recommendation_text || data.recommendation)}</div>
+    <div class="reco-strength">Strength: ${escHtml(data.recommendation_strength)}</div>
+  </div>`;
+
+  // Patient summary
+  html += `<div class="card"><div class="section-label">Patient Summary</div><div class="report-text">${escHtml(data.patient_summary)}</div></div>`;
+
+  // PCT Interpretation
+  html += `<div class="card"><div class="section-label">PCT Interpretation</div><div class="report-text">${escHtml(data.pct_interpretation)}</div></div>`;
+
+  // Rationale
+  html += `<div class="card"><div class="section-label">Rationale</div><div class="report-text">${escHtml(data.rationale)}</div></div>`;
+
+  // Kinetic
+  if (data.kinetic_analysis) {
+    html += `<div class="card"><div class="section-label">Kinetic Analysis</div><div class="report-text">${escHtml(data.kinetic_analysis)}</div></div>`;
+  }
+
+  // Next Steps
+  const nextSteps = data.next_steps || [];
+  if (nextSteps.length > 0) {
+    html += `<div class="card"><div class="section-label">Next Steps</div><ol class="next-steps-list">${nextSteps.map(s => `<li>${escHtml(s)}</li>`).join('')}</ol></div>`;
+  }
+
+  // Warnings
+  if (data.warnings && data.warnings.length > 0) {
+    html += `<div class="card"><div class="section-label">Clinical Warnings</div><ul class="warning-list">${data.warnings.map(w => `<li>${escHtml(w)}</li>`).join('')}</ul></div>`;
+  }
+
+  // Override flags
+  if (data.override_flags && data.override_flags.length > 0) {
+    html += `<div class="card"><div class="section-label">Override Flags</div><ul class="warning-list override-list">${data.override_flags.map(f => `<li>${escHtml(f)}</li>`).join('')}</ul></div>`;
+  }
+
+  // Agent reasoning (collapsible)
+  if (data.agents && data.agents.length > 0) {
+    html += `<details><summary>Show agent reasoning (${data.agents.length} agents)</summary>`;
+    data.agents.forEach(agent => {
+      html += `<div class="agent-block">
+        <div class="agent-block-title">${escHtml(agent.agent_name)}</div>
+        <div class="agent-reasoning">${escHtml(agent.reasoning)}</div>
+      </div>`;
+    });
+    html += `</details>`;
+  }
+
+  // Disclaimer
+  html += `<div class="disclaimer">${escHtml(data.disclaimer)}</div>`;
+
+  const reportEl = document.getElementById('report');
+  reportEl.innerHTML = html;
+  reportEl.style.display = 'block';
+  reportEl.scrollIntoView({ behavior: 'smooth' });
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+document.getElementById('form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const errEl = document.getElementById('error-banner');
+  errEl.style.display = 'none';
+
+  const payload = buildPayload();
+  if (!payload.pct_value) { errEl.textContent = 'PCT value is required.'; errEl.style.display = 'block'; return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Running pipeline...';
+  startProgress();
+
+  try {
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    stopProgress();
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ detail: res.statusText }));
+      throw new Error(err.detail || 'Server error');
+    }
+    const data = await res.json();
+    renderReport(data);
+  } catch (err) {
+    stopProgress();
+    document.getElementById('progress').style.display = 'none';
+    errEl.textContent = 'Error: ' + err.message;
+    errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Analyze with PCT Pipeline';
+  }
+});
+</script>
+</body>
+</html>

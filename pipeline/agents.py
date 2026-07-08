@@ -3,6 +3,8 @@ import json
 import logging
 import os
 import time
+import urllib.error
+import urllib.request
 from datetime import datetime
 
 from google import genai as google_genai
@@ -16,27 +18,90 @@ logger = logging.getLogger(__name__)
 
 _client = None
 
+PROVIDER_CONFIGS = {
+    "gemini": {
+        "display": "Google AI Studio",
+        "model": "gemini-2.5-flash",
+        "input_cost_per_million": 0.075,
+        "output_cost_per_million": 0.30,
+    },
+    "openai": {
+        "display": "OpenAI / ChatGPT",
+        "model": "gpt-4o-mini",
+        "input_cost_per_million": 0.15,
+        "output_cost_per_million": 0.60,
+    },
+    "anthropic": {
+        "display": "Anthropic / Claude",
+        "model": "claude-3-5-haiku-latest",
+        "input_cost_per_million": 0.80,
+        "output_cost_per_million": 4.00,
+    },
+    "openrouter": {
+        "display": "OpenRouter",
+        "model": "meta-llama/llama-4-scout:free",
+        "input_cost_per_million": 0.0,
+        "output_cost_per_million": 0.0,
+    },
+}
+
 VALID_RECOMMENDATIONS = {
     "start", "withhold", "stop",
     "monitor", "escalate", "clinician_decision"
 }
 
 
-def get_client():
+def get_client(api_key: str | None = None):
+    if api_key:
+        return google_genai.Client(api_key=api_key)
+
     global _client
     if _client is None:
-        _client = google_genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+        env_key = os.environ.get("GEMINI_API_KEY")
+        if not env_key:
+            raise ValueError("Google AI Studio API key is required")
+        _client = google_genai.Client(api_key=env_key)
     return _client
 
 
-async def _call_gemini_internal(system_prompt: str, user_prompt: str) -> str:
-    """Internal Gemini call — extracted for timeout wrapping."""
-    client = get_client()
+def detect_provider(api_key: str | None = None) -> str:
+    key = (api_key or "").strip()
+    if key.startswith("AIza"):
+        return "gemini"
+    if key.startswith("sk-or-"):
+        return "openrouter"
+    if key.startswith("sk-ant-"):
+        return "anthropic"
+    if key.startswith("sk-"):
+        return "openai"
+    if not key and os.environ.get("GEMINI_API_KEY"):
+        return "gemini"
+    raise ValueError("Unsupported API key format. Use Gemini, OpenAI, Claude, or OpenRouter.")
+
+
+def _post_json(url: str, headers: dict, payload: dict) -> dict:
+    body = json.dumps(payload).encode("utf-8")
+    request = urllib.request.Request(
+        url,
+        data=body,
+        headers={**headers, "Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as e:
+        detail = e.read().decode("utf-8", errors="replace")[:500]
+        raise ValueError(f"Provider request failed with HTTP {e.code}: {detail}")
+
+
+async def _call_gemini_internal(system_prompt: str, user_prompt: str, api_key: str | None = None) -> str:
+    client = get_client(api_key)
     loop = asyncio.get_event_loop()
     response = await loop.run_in_executor(
         None,
         lambda: client.models.generate_content(
-            model="gemini-2.5-flash",
+            model=PROVIDER_CONFIGS["gemini"]["model"],
             contents=user_prompt,
             config=genai_types.GenerateContentConfig(
                 system_instruction=system_prompt,
@@ -48,8 +113,71 @@ async def _call_gemini_internal(system_prompt: str, user_prompt: str) -> str:
     return response.text
 
 
-async def call_gemini(system_prompt: str, user_prompt: str,
-                      agent_name: str = "unknown") -> tuple[str, dict]:
+async def _call_openai_internal(system_prompt: str, user_prompt: str, api_key: str, provider: str) -> str:
+    config = PROVIDER_CONFIGS[provider]
+    url = (
+        "https://openrouter.ai/api/v1/chat/completions"
+        if provider == "openrouter"
+        else "https://api.openai.com/v1/chat/completions"
+    )
+    payload = {
+        "model": config["model"],
+        "messages": [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        "temperature": 0.1,
+        "response_format": {"type": "json_object"},
+    }
+    headers = {"Authorization": f"Bearer {api_key}"}
+    if provider == "openrouter":
+        headers.update({
+            "HTTP-Referer": "http://localhost:8000",
+            "X-Title": "BrahmsAI",
+        })
+    loop = asyncio.get_event_loop()
+    data = await loop.run_in_executor(None, lambda: _post_json(url, headers, payload))
+    return data["choices"][0]["message"]["content"]
+
+
+async def _call_anthropic_internal(system_prompt: str, user_prompt: str, api_key: str) -> str:
+    payload = {
+        "model": PROVIDER_CONFIGS["anthropic"]["model"],
+        "max_tokens": 4096,
+        "temperature": 0.1,
+        "system": system_prompt,
+        "messages": [{"role": "user", "content": user_prompt}],
+    }
+    headers = {
+        "x-api-key": api_key,
+        "anthropic-version": "2023-06-01",
+    }
+    loop = asyncio.get_event_loop()
+    data = await loop.run_in_executor(
+        None,
+        lambda: _post_json("https://api.anthropic.com/v1/messages", headers, payload),
+    )
+    text_blocks = [b.get("text", "") for b in data.get("content", []) if b.get("type") == "text"]
+    return "\n".join(text_blocks).strip()
+
+
+async def _call_model_internal(system_prompt: str, user_prompt: str, api_key: str | None = None) -> tuple[str, str]:
+    provider = detect_provider(api_key)
+    key = api_key.strip() if api_key else None
+    if provider == "gemini":
+        return await _call_gemini_internal(system_prompt, user_prompt, key), provider
+    if not key:
+        raise ValueError("API key is required")
+    if provider in {"openai", "openrouter"}:
+        return await _call_openai_internal(system_prompt, user_prompt, key, provider), provider
+    if provider == "anthropic":
+        return await _call_anthropic_internal(system_prompt, user_prompt, key), provider
+    raise ValueError("Unsupported API provider")
+
+
+async def call_model(system_prompt: str, user_prompt: str,
+                     agent_name: str = "unknown",
+                     api_key: str | None = None) -> tuple[str, dict]:
     """
     Returns (raw_text, metadata) where metadata contains:
     token counts, latency, cost estimation
@@ -59,8 +187,8 @@ async def call_gemini(system_prompt: str, user_prompt: str,
     start_time = time.time()
 
     try:
-        raw = await asyncio.wait_for(
-            _call_gemini_internal(system_prompt, user_prompt),
+        raw, provider = await asyncio.wait_for(
+            _call_model_internal(system_prompt, user_prompt, api_key),
             timeout=45.0  # 45 second timeout per agent
         )
     except asyncio.TimeoutError:
@@ -77,12 +205,15 @@ async def call_gemini(system_prompt: str, user_prompt: str,
         await limiter.wait()
         try:
             raw = await asyncio.wait_for(
-                _call_gemini_internal(
+                _call_model_internal(
                     system_prompt,
-                    user_prompt + "\n\nCRITICAL: Respond with ONLY valid JSON. No markdown, no code fences."
+                    user_prompt + "\n\nCRITICAL: Respond with ONLY valid JSON. No markdown, no code fences.",
+                    api_key,
                 ),
                 timeout=45.0
             )
+            if isinstance(raw, tuple):
+                raw, provider = raw
             parsed = json.loads(raw)
         except (asyncio.TimeoutError, json.JSONDecodeError) as e:
             logger.error(f"{agent_name}: Retry failed — {e}")
@@ -106,10 +237,9 @@ async def call_gemini(system_prompt: str, user_prompt: str,
     input_tokens = len(system_prompt + user_prompt) // 4
     output_tokens = len(raw) // 4
 
-    # Gemini 2.5 Flash pricing (paid tier for reference):
-    # Input: $0.075 per 1M tokens, Output: $0.30 per 1M tokens
-    input_cost  = (input_tokens  / 1_000_000) * 0.075
-    output_cost = (output_tokens / 1_000_000) * 0.30
+    config = PROVIDER_CONFIGS[provider]
+    input_cost = (input_tokens / 1_000_000) * config["input_cost_per_million"]
+    output_cost = (output_tokens / 1_000_000) * config["output_cost_per_million"]
 
     metadata = {
         "agent": agent_name,
@@ -118,22 +248,52 @@ async def call_gemini(system_prompt: str, user_prompt: str,
         "output_tokens_est": output_tokens,
         "total_tokens_est": input_tokens + output_tokens,
         "cost_usd_est": round(input_cost + output_cost, 6),
-        "model": "gemini-2.5-flash",
+        "provider": config["display"],
+        "model": config["model"],
     }
 
     return raw, metadata
 
 
-async def run_pipeline(patient: PatientInput) -> StewardshipReport:
+async def validate_api_key(api_key: str) -> dict:
+    if not api_key or not api_key.strip():
+        raise ValueError("API key is required")
+    provider = detect_provider(api_key)
+    config = PROVIDER_CONFIGS[provider]
+    try:
+        raw, _ = await asyncio.wait_for(
+            _call_model_internal(
+                "Respond only with valid JSON.",
+                "Return exactly this JSON object: {\"ok\": true}",
+                api_key.strip(),
+            ),
+            timeout=25.0,
+        )
+        json.loads(raw)
+    except asyncio.TimeoutError:
+        raise ValueError("API key validation timed out")
+    except Exception as e:
+        logger.warning("%s API key validation failed: %s", config["display"], type(e).__name__)
+        raise ValueError(f"{config['display']} API key is invalid or unavailable")
+    return {"provider": provider, "provider_label": config["display"], "model": config["model"]}
+
+
+async def validate_gemini_api_key(api_key: str) -> None:
+    await validate_api_key(api_key)
+
+
+async def run_pipeline(patient: PatientInput, api_key: str | None = None) -> StewardshipReport:
+    api_key = api_key.strip() if api_key else None
     patient_json = patient.model_dump_json(indent=2)
     all_metadata = []
 
     # A1 — Intake & Validation
     logger.info("Running A1: Intake & Validation")
-    a1_raw, a1_meta = await call_gemini(
+    a1_raw, a1_meta = await call_model(
         PROMPTS["A1_SYSTEM"],
         PROMPTS["A1_USER"].format(patient_json=patient_json),
         agent_name="A1_Intake",
+        api_key=api_key,
     )
     all_metadata.append(a1_meta)
     a1_data = json.loads(a1_raw)
@@ -147,10 +307,11 @@ async def run_pipeline(patient: PatientInput) -> StewardshipReport:
 
     # A2 — Clinical Reasoning
     logger.info("Running A2: Clinical Reasoning")
-    a2_raw, a2_meta = await call_gemini(
+    a2_raw, a2_meta = await call_model(
         PROMPTS["A2_SYSTEM"],
         PROMPTS["A2_USER"].format(patient_json=patient_json, a1_output=a1_raw),
         agent_name="A2_Clinical",
+        api_key=api_key,
     )
     all_metadata.append(a2_meta)
     a2_data = json.loads(a2_raw)
@@ -164,10 +325,11 @@ async def run_pipeline(patient: PatientInput) -> StewardshipReport:
 
     # A3 — Kinetic Analysis & Context
     logger.info("Running A3: Kinetic Analysis")
-    a3_raw, a3_meta = await call_gemini(
+    a3_raw, a3_meta = await call_model(
         PROMPTS["A3_SYSTEM"],
         PROMPTS["A3_USER"].format(patient_json=patient_json, a2_output=a2_raw),
         agent_name="A3_Kinetic",
+        api_key=api_key,
     )
     all_metadata.append(a3_meta)
     a3_data = json.loads(a3_raw)
@@ -181,7 +343,7 @@ async def run_pipeline(patient: PatientInput) -> StewardshipReport:
 
     # A4 — Final Report
     logger.info("Running A4: Final Report")
-    a4_raw, a4_meta = await call_gemini(
+    a4_raw, a4_meta = await call_model(
         PROMPTS["A4_SYSTEM"],
         PROMPTS["A4_USER"].format(
             patient_json=patient_json,
@@ -190,6 +352,7 @@ async def run_pipeline(patient: PatientInput) -> StewardshipReport:
             a3_output=a3_raw,
         ),
         agent_name="A4_Report",
+        api_key=api_key,
     )
     all_metadata.append(a4_meta)
     a4_data = json.loads(a4_raw)

@@ -8,6 +8,8 @@ Clinical decision support prototype for **PCT-guided antibiotic stewardship** us
 
 > **Research only:** BrahmsAI is not a medical device and does not replace clinician judgment.
 
+Project supervision: Claudia Steffen, Sr. Manager for Global Partner and Digital Development, PCT & Licensed Markers at Thermo Fisher Scientific. Contact: claudia.steffen@thermofisher.com.
+
 ## Highlights
 
 - PCT threshold interpretation for LRTI and sepsis workflows.

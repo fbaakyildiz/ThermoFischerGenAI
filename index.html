@@ -335,8 +335,23 @@
         content: "";
       }
 
+      .hero-console::after {
+        position: absolute;
+        top: -96px;
+        right: -118px;
+        width: 390px;
+        height: 390px;
+        pointer-events: none;
+        background: url("assets/BrahmsAI_icon.svg") center / contain no-repeat;
+        content: "";
+        filter: drop-shadow(0 34px 46px rgba(13, 43, 85, 0.2));
+        opacity: 0.105;
+        transform: rotate(-8deg);
+      }
+
       .console-inner {
         position: relative;
+        z-index: 1;
         display: grid;
         gap: 14px;
       }
@@ -354,17 +369,20 @@
 
       .console-logo {
         display: grid;
-        width: 74px;
-        height: 74px;
+        min-width: 168px;
+        min-height: 74px;
         place-items: center;
         border-radius: 22px;
         background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(220, 245, 248, 0.68));
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.94), 0 14px 32px rgba(13, 43, 85, 0.13);
+        padding: 0 20px;
       }
 
-      .console-logo img {
-        width: 52px;
-        height: 52px;
+      .console-logo strong {
+        color: var(--navy);
+        font-size: 23px;
+        font-weight: 900;
+        letter-spacing: 0;
       }
 
       .research-badge {
@@ -993,7 +1011,7 @@
           <div class="console-inner">
             <div class="console-top">
               <div class="console-logo">
-                <img src="assets/BrahmsAI_icon.svg" alt="BrahmsAI icon" />
+                <strong>BrahmsAI</strong>
               </div>
               <span class="research-badge">Research only</span>
             </div>

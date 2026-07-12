@@ -207,6 +207,26 @@
         padding: 58px 0 68px;
       }
 
+      .hero-copy {
+        position: relative;
+        isolation: isolate;
+      }
+
+      .hero-copy::before {
+        position: absolute;
+        top: -112px;
+        left: -76px;
+        z-index: -1;
+        width: 420px;
+        height: 420px;
+        pointer-events: none;
+        background: url("assets/BrahmsAI_icon.svg") center / contain no-repeat;
+        content: "";
+        filter: drop-shadow(0 34px 54px rgba(13, 43, 85, 0.18));
+        opacity: 0.085;
+        transform: rotate(9deg);
+      }
+
       .eyebrow {
         display: inline-flex;
         align-items: center;
@@ -863,7 +883,9 @@
       }
 
       footer {
+        position: relative;
         display: flex;
+        overflow: hidden;
         justify-content: space-between;
         gap: 18px;
         width: min(1180px, calc(100% - 32px));
@@ -872,6 +894,25 @@
         color: var(--muted);
         font-size: 14px;
         padding: 30px 0 44px;
+      }
+
+      footer::before {
+        position: absolute;
+        right: 8%;
+        bottom: -160px;
+        width: 360px;
+        height: 360px;
+        pointer-events: none;
+        background: url("assets/BrahmsAI_icon.svg") center / contain no-repeat;
+        content: "";
+        filter: drop-shadow(0 30px 48px rgba(13, 43, 85, 0.18));
+        opacity: 0.075;
+        transform: rotate(-12deg);
+      }
+
+      footer > * {
+        position: relative;
+        z-index: 1;
       }
 
       footer a {
@@ -907,6 +948,14 @@
         h1 {
           font-size: 54px;
         }
+
+        .hero-copy::before {
+          top: -82px;
+          left: -42px;
+          width: 330px;
+          height: 330px;
+          opacity: 0.07;
+        }
       }
 
       @media (max-width: 680px) {
@@ -924,6 +973,21 @@
         h1 {
           font-size: 42px;
           line-height: 1.03;
+        }
+
+        .hero-copy::before {
+          top: -58px;
+          left: -34px;
+          width: 250px;
+          height: 250px;
+          opacity: 0.06;
+        }
+
+        footer::before {
+          right: -82px;
+          bottom: -118px;
+          width: 260px;
+          height: 260px;
         }
 
         h2 {

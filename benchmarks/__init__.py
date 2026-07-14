@@ -1,1 +1,1 @@
-"""Benchmark utilities for BrahmsAI."""
+"""Benchmark utilities for ProcalysAI."""

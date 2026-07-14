@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="BrahmsAI is a local clinical decision-support prototype for PCT-guided antibiotic stewardship." />
-    <title>BrahmsAI</title>
+    <meta name="description" content="ProcalysAI is a local clinical decision-support prototype for PCT-guided antibiotic stewardship." />
+    <title>ProcalysAI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -75,6 +75,9 @@
       .steps-grid p { color: var(--muted); line-height: 1.58; }
       .section.dark .steps-grid article { border-color: rgba(255,255,255,0.16); background: rgba(255,255,255,0.08); }
       .section.dark .steps-grid p { color: rgba(255,255,255,0.72); }
+      .disclaimer-section { padding-bottom: 28px; }
+      .disclaimer-copy { max-width: 920px; color: var(--muted); font-size: 15px; line-height: 1.7; }
+      .disclaimer-link { margin-top: 14px; min-height: 38px; font-size: 12px; }
       pre { margin: 0 0 18px; overflow-x: auto; border: 1px solid rgba(255,255,255,0.16); border-radius: 16px; background: rgba(255,255,255,0.08); padding: 18px; }
       code { font-family: "IBM Plex Mono", monospace; }
       .note { color: rgba(255,255,255,0.72); }
@@ -86,12 +89,12 @@
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="https://fbaakyildiz.github.io/?skipIntro=1#projects"><span>BA</span><strong>BrahmsAI</strong></a>
+      <a class="brand" href="https://fbaakyildiz.github.io/?skipIntro=1#projects"><span>BA</span><strong>ProcalysAI</strong></a>
       <nav aria-label="Project navigation">
         <a href="https://fbaakyildiz.github.io/?skipIntro=1#projects">Portfolio</a>
         <a href="#pipeline">Pipeline</a>
         <a href="#run">Run locally</a>
-        <a class="github-nav-link" href="https://github.com/fbaakyildiz/BrahmsAI" target="_blank" rel="noreferrer" aria-label="Open BrahmsAI on GitHub">
+        <a class="github-nav-link" href="https://github.com/fbaakyildiz/BrahmsAI" target="_blank" rel="noreferrer" aria-label="Open ProcalysAI on GitHub">
           <img src="https://fbaakyildiz.github.io/assets/githublogo.png" alt="GitHub" />
         </a>
       </nav>
@@ -102,7 +105,7 @@
           <p class="eyebrow">Clinical AI decision support</p>
           <h1>PCT-guided antibiotic stewardship with structured agent review.</h1>
           <p class="hero-text">
-            BrahmsAI is a local research prototype that combines structured patient inputs, PCT threshold logic,
+            ProcalysAI is a local research prototype that combines structured patient inputs, PCT threshold logic,
             serial biomarker kinetics, prompt-injection controls, and a four-agent report pipeline.
             The project was supervised by Claudia Steffen, Sr. Manager for Global Partner and Digital Development,
             PCT & Licensed Markers at Thermo Fisher Scientific.
@@ -114,7 +117,7 @@
         </div>
         <aside class="panel" aria-label="Project summary">
           <div class="brand-logo-card">
-            <img src="docs/assets/brand/BrahmsAI_logo_wide.png" alt="BrahmsAI" />
+            <img src="docs/assets/brand/ProcalysAI_logo.svg" alt="ProcalysAI" />
           </div>
           <div class="metric"><span>A1-A4</span><small>agent pipeline</small></div>
           <div class="panel-grid">
@@ -151,7 +154,20 @@ pip install -r requirements.txt
 uvicorn main:app --host 127.0.0.1 --port 8000</code></pre>
         <p class="note">Open <code>http://localhost:8000</code>. The browser asks for a model API key for the current local session.</p>
       </section>
+
+      <section class="section disclaimer-section" id="disclaimer">
+        <div class="section-heading">
+          <p class="eyebrow">Academic prototype disclaimer</p>
+          <h2>For educational and research purposes only.</h2>
+        </div>
+        <div class="disclaimer-copy">
+          <p>This project was developed by me as part of the Technical University of Munich course “Foundations and Applications of Generative AI.” It is an academic prototype for educational and research purposes only. It is not a medical device, clinical decision-support product, diagnostic tool, or commercial Thermo Fisher Scientific product. It must not be used for patient care, diagnosis, treatment decisions, or antibiotic prescribing.</p>
+          <p>The project was based on publicly available educational materials and course-provided background information. It is not endorsed, approved, validated, or sponsored by Thermo Fisher or BRAHMS GmbH.</p>
+          <p>Any references to third-party names, products, trademarks, or biomarkers are for descriptive academic context only. All trademarks remain the property of Thermo Fisher Scientific or its affiliates.</p>
+          <a class="button secondary disclaimer-link" href="https://github.com/fbaakyildiz/BrahmsAI/blob/main/DISCLAIMER.md" target="_blank" rel="noreferrer">Read full disclaimer</a>
+        </div>
+      </section>
     </main>
-    <footer><span>BrahmsAI</span><span><a href="https://fbaakyildiz.github.io/?skipIntro=1#projects">Portfolio</a></span></footer>
+    <footer><span>ProcalysAI</span><span><a href="https://fbaakyildiz.github.io/?skipIntro=1#projects">Portfolio</a></span></footer>
   </body>
 </html>

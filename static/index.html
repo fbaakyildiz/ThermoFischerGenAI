@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BrahmsAI - PCT Antibiotic Stewardship</title>
+<title>ProcalysAI - PCT Antibiotic Stewardship</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
@@ -44,7 +44,7 @@ body {
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
 
-.app-shell { min-height: 100vh; display: grid; grid-template-rows: auto 1fr; }
+.app-shell { min-height: 100vh; display: grid; grid-template-rows: auto minmax(0,1fr) auto; }
 .topbar {
   position: sticky;
   top: 0;
@@ -926,6 +926,17 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
 .agent-reason strong { display: block; color: #BFEFED; font-size: 12px; margin-bottom: 5px; }
 .agent-reason div { color: rgba(232,237,242,.66); font-size: 12px; line-height: 1.55; white-space: pre-wrap; }
 .disclaimer { margin-top: 16px; color: rgba(232,237,242,.52); font-size: 11px; line-height: 1.55; }
+.academic-banner {
+  margin: 0 18px 18px;
+  border: 1px solid rgba(11,122,117,.34);
+  border-radius: 14px;
+  background: rgba(11,122,117,.11);
+  color: rgba(232,237,242,.78);
+  font-size: 11px;
+  line-height: 1.45;
+  padding: 11px 14px;
+  text-align: center;
+}
 
 @media (max-width: 1280px) {
   .workspace { grid-template-columns: 240px minmax(0,1fr); }
@@ -964,7 +975,7 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
 <body>
 <div id="api-gate" class="api-gate">
   <form id="api-key-form" class="api-card">
-    <div class="brand-mark" aria-label="BrahmsAI">
+    <div class="brand-mark" aria-label="ProcalysAI">
       <span class="brand-symbol" aria-hidden="true">
         <svg viewBox="0 0 40 40" focusable="false">
           <circle cx="12" cy="13" r="3.2"></circle>
@@ -973,11 +984,11 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
           <path d="M10 23 h6 l3 -10 l5 19 l4 -13 l3 4 h4"></path>
         </svg>
       </span>
-      <span class="brand-word"><strong>Brahms</strong><em>AI</em></span>
+      <span class="brand-word"><strong>Procalys</strong><em>AI</em></span>
     </div>
     <div class="api-kicker">Local model access</div>
     <h1 class="api-title">Enter your model API key.</h1>
-    <p class="api-copy">BrahmsAI detects Gemini, OpenAI, Claude, or OpenRouter keys, validates access, then runs the pipeline with the matching provider. The key is not saved in the browser and is only sent to your local FastAPI server for this session.</p>
+    <p class="api-copy">ProcalysAI detects Gemini, OpenAI, Claude, or OpenRouter keys, validates access, then runs the pipeline with the matching provider. The key is not saved in the browser and is only sent to your local FastAPI server for this session.</p>
     <div class="api-field">
       <label class="label" for="gemini_api_key">Model API Key</label>
       <input type="password" id="gemini_api_key" name="gemini_api_key" autocomplete="off" spellcheck="false" placeholder="AIza..., sk-..., sk-ant..., sk-or-...">
@@ -985,7 +996,7 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
     <div id="api-key-error" class="api-error"></div>
     <div id="api-key-detected" class="api-detected"></div>
     <div class="api-actions">
-      <button type="submit" id="api-key-submit" class="api-submit">Verify Key & Open BrahmsAI</button>
+      <button type="submit" id="api-key-submit" class="api-submit">Verify Key & Open ProcalysAI</button>
       <div class="api-note">For local use only. Refreshing the page will ask for the key again.</div>
     </div>
   </form>
@@ -994,7 +1005,7 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
 <div id="app-shell" class="app-shell api-locked">
   <header class="topbar">
     <div class="brand">
-      <div class="brand-mark" aria-label="BrahmsAI">
+      <div class="brand-mark" aria-label="ProcalysAI">
         <span class="brand-symbol" aria-hidden="true">
           <svg viewBox="0 0 40 40" focusable="false">
             <circle cx="12" cy="13" r="3.2"></circle>
@@ -1003,7 +1014,7 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
             <path d="M10 23 h6 l3 -10 l5 19 l4 -13 l3 4 h4"></path>
           </svg>
         </span>
-        <span class="brand-word"><strong>Brahms</strong><em>AI</em></span>
+        <span class="brand-word"><strong>Procalys</strong><em>AI</em></span>
       </div>
       <div class="brand-copy">
         <div class="brand-title">Clinical stewardship cockpit</div>
@@ -1039,7 +1050,7 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
       <form id="form">
         <section class="hero-card">
           <div class="hero-main">
-            <div class="eyebrow">BrahmsAI Decision Console</div>
+            <div class="eyebrow">ProcalysAI Decision Console</div>
             <h1 class="hero-title">PCT-guided antibiotic stewardship in one clinical view.</h1>
             <p class="hero-text">Enter structured observations, trend serial PCT values, and run the four-agent stewardship pipeline without changing the existing API payload.</p>
             <div class="hero-metrics">
@@ -1209,7 +1220,7 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
 
         <section class="submit-zone">
           <div class="submit-copy">
-            <strong>Run BrahmsAI Analysis</strong>
+            <strong>Run ProcalysAI Analysis</strong>
             <span>~50 seconds - 4 agents - structured JSON report</span>
           </div>
           <button type="submit" id="sub-btn" class="run-btn">Analyze Patient</button>
@@ -1219,7 +1230,7 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
 
     <aside class="results-dock">
       <div class="dock-top">
-        <div class="brand-mark brand-mark-compact" aria-label="BrahmsAI">
+        <div class="brand-mark brand-mark-compact" aria-label="ProcalysAI">
         <span class="brand-symbol" aria-hidden="true">
           <svg viewBox="0 0 40 40" focusable="false">
             <circle cx="12" cy="13" r="3.2"></circle>
@@ -1228,7 +1239,7 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
             <path d="M10 23 h6 l3 -10 l5 19 l4 -13 l3 4 h4"></path>
           </svg>
         </span>
-        <span class="brand-word"><strong>Brahms</strong><em>AI</em></span>
+        <span class="brand-word"><strong>Procalys</strong><em>AI</em></span>
       </div>
         <span class="dock-chip">Output panel</span>
       </div>
@@ -1258,9 +1269,13 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
         <div id="prog-msg">Initializing pipeline...</div>
       </div>
 
-      <div id="rpt-panel"></div>
+  <div id="rpt-panel"></div>
     </aside>
   </main>
+
+  <footer class="academic-banner" role="note">
+    Academic prototype only. Not endorsed, approved, or validated by Thermo Fisher Scientific.
+  </footer>
 </div>
 
 <script>
@@ -1591,7 +1606,7 @@ $("api-key-form").addEventListener("submit", async e => {
     showApiError(err.message || "API key validation failed.");
   } finally {
     btn.disabled = false;
-    btn.textContent = "Verify Key & Open BrahmsAI";
+    btn.textContent = "Verify Key & Open ProcalysAI";
   }
 });
 

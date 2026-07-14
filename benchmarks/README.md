@@ -1,6 +1,6 @@
 # Benchmarks
 
-Benchmark utilities for evaluating BrahmsAI recommendations against curated ground-truth cases.
+Benchmark utilities for evaluating ProcalysAI recommendations against curated ground-truth cases.
 
 ## Files
 

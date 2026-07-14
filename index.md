@@ -1,17 +1,17 @@
-# BrahmsAI
+# ProcalysAI
 
-[Back to Portfolio](https://fbaakyildiz.github.io/)
+[Back to Portfolio](https://fbaakyildiz.github.io/?skipIntro=1#projects)
 
 Clinical decision-support prototype for PCT-guided antibiotic stewardship using structured patient data, serial procalcitonin kinetics, and a hardened multi-agent LLM pipeline.
 
-> Research use only. BrahmsAI is not a medical device and does not replace clinician judgment.
+> Research use only. ProcalysAI is not a medical device and does not replace clinician judgment.
 
 ## Project Materials
 
 | Resource | Link |
 |---|---|
 | Demo video | [Watch demo](https://www.youtube.com/watch?v=7yghCQTVTS8) |
-| GitHub repository | [fbaakyildiz/BrahmsAI](https://github.com/fbaakyildiz/BrahmsAI) |
+| GitHub repository | [fbaakyildiz/ProcalysAI](https://github.com/fbaakyildiz/BrahmsAI) |
 | Design document | [Open design document](docs/DESIGN.md) |
 | Frontend source | [Open UI file](static/index.html) |
 | Benchmark suite | [Open benchmarks](benchmarks/) |
@@ -42,7 +42,7 @@ A4 Final stewardship report
 
 ## Why It Matters
 
-Antibiotic stewardship decisions often require combining biomarker thresholds, clinical instability, patient risk, and serial response trends. BrahmsAI was built to test whether a structured multi-agent workflow can produce more transparent, auditable recommendations than a single general-purpose prompt.
+Antibiotic stewardship decisions often require combining biomarker thresholds, clinical instability, patient risk, and serial response trends. ProcalysAI was built to test whether a structured multi-agent workflow can produce more transparent, auditable recommendations than a single general-purpose prompt.
 
 The system emphasizes:
 
@@ -79,6 +79,16 @@ The app asks for a model API key in the browser before analysis starts. The key 
 | `pipeline/schemas.py` | Pydantic request and response models |
 | `static/index.html` | Single-file local UI |
 | `docs/DESIGN.md` | Architecture and implementation notes |
+
+## Academic Prototype Disclaimer
+
+This project was developed by me as part of the Technical University of Munich course “Foundations and Applications of Generative AI.” It is an academic prototype for educational and research purposes only. It is not a medical device, clinical decision-support product, diagnostic tool, or commercial Thermo Fisher Scientific product. It must not be used for patient care, diagnosis, treatment decisions, or antibiotic prescribing.
+
+The project was based on publicly available educational materials and course-provided background information. It is not endorsed, approved, validated, or sponsored by Thermo Fisher or BRAHMS GmbH.
+
+Any references to third-party names, products, trademarks, or biomarkers are for descriptive academic context only. All trademarks remain the property of Thermo Fisher Scientific or its affiliates.
+
+[Read the full disclaimer](DISCLAIMER.md)
 
 ## Academic Disclaimer
 

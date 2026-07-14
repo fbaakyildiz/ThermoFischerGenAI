@@ -1,12 +1,12 @@
-# BrahmsAI Design Document
+# ProcalysAI Design Document
 
-Developer-level architecture and implementation notes for BrahmsAI, a local-first clinical decision support prototype for PCT-guided antibiotic stewardship.
+Developer-level architecture and implementation notes for ProcalysAI, a local-first clinical decision support prototype for PCT-guided antibiotic stewardship.
 
-> Research use only. BrahmsAI is not a medical device and does not replace clinician judgment.
+> Research use only. ProcalysAI is not a medical device and does not replace clinician judgment.
 
 ## 1. Product Overview
 
-BrahmsAI assists clinicians and researchers with procalcitonin (PCT)-guided antibiotic stewardship decisions. The application collects structured patient data, applies B.R.A.H.M.S-style PCT threshold logic through a multi-agent LLM pipeline, and returns a concise stewardship report with recommendation, rationale, warnings, kinetic interpretation, and audit metadata.
+ProcalysAI assists clinicians and researchers with procalcitonin (PCT)-guided antibiotic stewardship decisions. The application collects structured patient data, applies B.R.A.H.M.S-style PCT threshold logic through a multi-agent LLM pipeline, and returns a concise stewardship report with recommendation, rationale, warnings, kinetic interpretation, and audit metadata.
 
 Core capabilities:
 
@@ -34,7 +34,7 @@ Core capabilities:
 │   ├── archive/               # Archived document exports
 │   └── assets/brand/          # GitHub-facing brand assets
 ├── static/
-│   ├── index.html             # Single-file BrahmsAI frontend
+│   ├── index.html             # Single-file ProcalysAI frontend
 │   └── *.png                  # UI image assets
 ├── pipeline/
 │   ├── __init__.py            # Public pipeline exports
@@ -84,7 +84,7 @@ No React, bundler, package manager, or build step is required.
 Major UI regions:
 
 - API key gate: validates a Gemini, OpenAI, Claude, or OpenRouter key before unlocking the app.
-- Header: BrahmsAI identity, research-only state, detected provider/model status.
+- Header: ProcalysAI identity, research-only state, detected provider/model status.
 - Input column: PCT hero input, clinical setting, labs, vitals, clinical flags, serial PCT tracking, notes.
 - Result column: placeholder, progress state, final report rendering.
 - Kinetic section: serial measurements, live peak/current/decline calculation, Day 4 alert logic.
@@ -680,7 +680,7 @@ Recommended next steps:
 
 ## 19. Design Principles
 
-BrahmsAI follows these implementation principles:
+ProcalysAI follows these implementation principles:
 
 - Local-first by default.
 - Structured inputs over free text.

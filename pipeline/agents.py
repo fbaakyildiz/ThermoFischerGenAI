@@ -133,7 +133,7 @@ async def _call_openai_internal(system_prompt: str, user_prompt: str, api_key: s
     if provider == "openrouter":
         headers.update({
             "HTTP-Referer": "http://localhost:8000",
-            "X-Title": "BrahmsAI",
+            "X-Title": "ProcalysAI",
         })
     loop = asyncio.get_event_loop()
     data = await loop.run_in_executor(None, lambda: _post_json(url, headers, payload))

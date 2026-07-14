@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="ProcalysAI is a local research prototype for PCT-guided antibiotic stewardship with structured multi-agent reasoning."
+      content="ProcalysAI is a local research prototype for procalcitonin-guided antibiotic stewardship with structured multi-agent reasoning."
     />
-    <title>ProcalysAI | PCT Stewardship Decision Support</title>
+    <title>ProcalysAI | Procalcitonin Stewardship Decision Support</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -1124,10 +1124,10 @@
       <section class="hero">
         <div class="hero-copy">
           <p class="eyebrow">Clinical AI research prototype</p>
-          <h1>PCT-guided antibiotic stewardship, structured as a multi-agent review.</h1>
+          <h1>Procalcitonin-guided antibiotic stewardship, structured as a multi-agent review.</h1>
           <p class="hero-text">
             ProcalysAI turns structured test subject data into a clinician-readable stewardship report. It combines
-            PCT threshold logic, serial PCT kinetics, safety overrides, prompt-injection defenses,
+            procalcitonin threshold logic, serial procalcitonin kinetics, safety overrides, prompt-injection defenses,
             output validation, and structured logging inside a local FastAPI application.
           </p>
           <div class="hero-actions">
@@ -1149,14 +1149,14 @@
             <div class="decision-card">
               <div class="metric-line">
                 <div>
-                  <div class="metric-label">Current PCT</div>
+                  <div class="metric-label">Current procalcitonin</div>
                   <div class="pct-value">0.80</div>
                   <div class="pct-unit">ng/mL · LRTI pathway</div>
                 </div>
                 <div class="recommendation">Start antibiotics</div>
               </div>
 
-              <div class="bands" aria-label="PCT threshold bands">
+              <div class="bands" aria-label="procalcitonin threshold bands">
                 <div class="band"><strong>&lt;0.10</strong><span>Strongly withhold</span></div>
                 <div class="band"><strong>0.10-0.25</strong><span>Gray zone</span></div>
                 <div class="band"><strong>0.25-0.50</strong><span>Consider</span></div>
@@ -1188,7 +1188,7 @@
             <span>Method</span>
             <h3>Algorithm-aligned reasoning</h3>
             <p>
-              PCT values are interpreted through pathway-specific LRTI and sepsis thresholds, including gray-zone
+              Procalcitonin values are interpreted through pathway-specific LRTI and sepsis thresholds, including gray-zone
               handling and escalation logic for treatment monitoring.
             </p>
           </article>
@@ -1212,8 +1212,8 @@
             <span>Supervision</span>
             <h3>Industry-guided framing</h3>
             <p>
-              Project supervision by Claudia Steffen, Sr. Manager for Global Partner and Digital Development, PCT &
-              Licensed Markers at Thermo Fisher Scientific.
+              Project supervision by Claudia Steffen, Sr. Manager for Global Partner and Digital Development,
+              Procalcitonin and Licensed Markers at Thermo Fisher Scientific.
             </p>
           </article>
         </div>
@@ -1232,7 +1232,7 @@
         <div class="concept-lab">
           <div class="concept-tabs" role="tablist" aria-label="ProcalysAI concept explorer">
             <button class="concept-tab active" type="button" data-concept="thresholds" role="tab" aria-selected="true">
-              <span><strong>PCT bands</strong><small>Threshold-driven recommendation</small></span><em>01</em>
+              <span><strong>Procalcitonin bands</strong><small>Threshold-driven recommendation</small></span><em>01</em>
             </button>
             <button class="concept-tab" type="button" data-concept="kinetics" role="tab" aria-selected="false">
               <span><strong>Kinetic tracking</strong><small>Serial biomarker monitoring</small></span><em>02</em>
@@ -1248,7 +1248,7 @@
           <div class="glass concept-panel">
             <article class="concept-copy">
               <span class="mini-label" id="conceptLabel">Algorithm</span>
-              <h3 id="conceptTitle">PCT bands map the biomarker value to a constrained recommendation.</h3>
+              <h3 id="conceptTitle">Procalcitonin bands map the biomarker value to a constrained recommendation.</h3>
               <p id="conceptBody">
                 The model is not asked to invent clinical thresholds. It receives structured patient values and is
                 instructed to apply the project threshold table for LRTI or sepsis.
@@ -1291,12 +1291,12 @@
           <article class="agent-card">
             <span>A2</span>
             <h3>Threshold reasoning</h3>
-            <p>Applies PCT bands for the selected clinical setting and preserves gray-zone uncertainty.</p>
+            <p>Applies procalcitonin bands for the selected clinical setting and preserves gray-zone uncertainty.</p>
           </article>
           <article class="agent-card">
             <span>A3</span>
             <h3>Kinetic and context review</h3>
-            <p>Reviews serial PCT decline, antibiotic day, instability flags, and high-risk patient status.</p>
+            <p>Reviews serial procalcitonin decline, antibiotic day, instability flags, and high-risk patient status.</p>
           </article>
           <article class="agent-card">
             <span>A4</span>
@@ -1396,7 +1396,7 @@ uvicorn main:app --host 127.0.0.1 --port 8000</code></pre>
       const concepts = {
         thresholds: {
           label: "Algorithm",
-          title: "PCT bands map the biomarker value to a constrained recommendation.",
+          title: "Procalcitonin bands map the biomarker value to a constrained recommendation.",
           body:
             "The model is not asked to invent clinical thresholds. It receives structured patient values and is instructed to apply the project threshold table for LRTI or sepsis.",
           list: [
@@ -1414,11 +1414,11 @@ uvicorn main:app --host 127.0.0.1 --port 8000</code></pre>
         },
         kinetics: {
           label: "Monitoring",
-          title: "Serial PCT measurements turn a single value into a treatment trajectory.",
+          title: "Serial procalcitonin measurements turn a single value into a treatment trajectory.",
           body:
-            "When the patient is already on antibiotics, ProcalysAI checks decline from peak PCT and antibiotic day to support stop, monitor, or escalation recommendations.",
+            "When the patient is already on antibiotics, ProcalysAI checks decline from peak procalcitonin and antibiotic day to support stop, monitor, or escalation recommendations.",
           list: [
-            "Peak and current PCT values are converted into percent decline",
+            "Peak and current procalcitonin values are converted into percent decline",
             ">=80% decline can support discontinuation logic",
             "Day 4 with insufficient decline raises treatment-failure concern"
           ],
@@ -1435,7 +1435,7 @@ uvicorn main:app --host 127.0.0.1 --port 8000</code></pre>
           label: "Safety",
           title: "Clinical instability and high-risk flags override biomarker-only reasoning.",
           body:
-            "The system keeps PCT as decision support, not as the only decision-maker. Safety flags can force clinician review or conservative escalation.",
+            "The system keeps procalcitonin as decision support, not as the only decision-maker. Safety flags can force clinician review or conservative escalation.",
           list: [
             "Clinical instability is checked before final recommendation",
             "High-risk patient status is preserved in the report",

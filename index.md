@@ -2,7 +2,7 @@
 
 [Back to Portfolio](https://fbaakyildiz.github.io/?skipIntro=1#projects)
 
-Clinical decision-support prototype for PCT-guided antibiotic stewardship using structured patient data, serial procalcitonin kinetics, and a hardened multi-agent LLM pipeline.
+Clinical decision-support prototype for procalcitonin-guided antibiotic stewardship using structured test subject data, serial procalcitonin kinetics, and a hardened multi-agent LLM pipeline.
 
 > Research use only. ProcalysAI is not a medical device and does not replace clinician judgment.
 
@@ -18,9 +18,9 @@ Clinical decision-support prototype for PCT-guided antibiotic stewardship using 
 
 ## What The Project Does
 
-- Interprets PCT thresholds for LRTI and sepsis workflows.
-- Tracks serial PCT values and calculates treatment-response decline.
-- Flags Day 4 treatment-failure risk when PCT decline is below the expected threshold.
+- Interprets procalcitonin thresholds for LRTI and sepsis workflows.
+- Tracks serial procalcitonin values and calculates treatment-response decline.
+- Flags Day 4 treatment-failure risk when procalcitonin decline is below the expected threshold.
 - Applies clinical safety overrides for unstable or high-risk patients.
 - Routes the case through four specialized agents: intake, clinical reasoning, kinetic context, and final report.
 - Supports local use with Gemini, OpenAI, Claude, and OpenRouter API keys.
@@ -33,7 +33,7 @@ Patient input
     ↓
 A1 Intake and validation
     ↓
-A2 PCT threshold reasoning
+A2 procalcitonin threshold reasoning
     ↓
 A3 Kinetic and comorbidity context
     ↓

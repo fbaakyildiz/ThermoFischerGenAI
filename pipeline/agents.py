@@ -400,7 +400,7 @@ async def run_pipeline(patient: PatientInput, api_key: str | None = None) -> Ste
     if day4_alert:
         all_warnings = _dedupe(
             all_warnings
-            + ["Day 4 alert: PCT decline below 80% threshold; clinician review required."]
+            + ["Day 4 alert: procalcitonin decline below 80% threshold; clinician review required."]
         )
 
     report = StewardshipReport(

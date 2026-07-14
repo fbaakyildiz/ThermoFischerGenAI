@@ -1,7 +1,7 @@
 BENCHMARK_CASES = [
 
     # ══════════════════════════════════════════════════════════════════════
-    # CATEGORY 1 — Clear Withhold (PCT < 0.10, LRTI, no confounders)
+    # CATEGORY 1 — Clear Withhold (procalcitonin < 0.10, LRTI, no confounders)
     # Expected: withhold / strong
     # ══════════════════════════════════════════════════════════════════════
     {
@@ -81,7 +81,7 @@ BENCHMARK_CASES = [
     },
 
     # ══════════════════════════════════════════════════════════════════════
-    # CATEGORY 2 — Clear Start (PCT > threshold or override)
+    # CATEGORY 2 — Clear Start (procalcitonin > threshold or override)
     # Expected: start / strong
     # ══════════════════════════════════════════════════════════════════════
     {
@@ -270,7 +270,7 @@ BENCHMARK_CASES = [
             "burns_trauma": False,
             "immunosuppressed": False,
             "on_antibiotics": False,
-            "clinical_notes": "49-year-old female, pneumonia suspected clinically but mild presentation. PCT in encourage zone but clinical picture mild."
+            "clinical_notes": "49-year-old female, pneumonia suspected clinically but mild presentation. procalcitonin in encourage zone but clinical picture mild."
         }
     },
     {
@@ -297,7 +297,7 @@ BENCHMARK_CASES = [
             "burns_trauma": False,
             "immunosuppressed": False,
             "on_antibiotics": False,
-            "clinical_notes": "64-year-old male, ICU day 1, suspected infection but source unclear. Stable but borderline PCT."
+            "clinical_notes": "64-year-old male, ICU day 1, suspected infection but source unclear. Stable but borderline procalcitonin."
         }
     },
     {
@@ -323,7 +323,7 @@ BENCHMARK_CASES = [
             "immunosuppressed": False,
             "on_antibiotics": False,
             "symptom_onset_hours": 8,
-            "clinical_notes": "71-year-old female, elderly with mild pneumonia symptoms. PCT borderline. Symptom onset only 8 hours ago — PCT may not have peaked."
+            "clinical_notes": "71-year-old female, elderly with mild pneumonia symptoms. procalcitonin borderline. Symptom onset only 8 hours ago — procalcitonin may not have peaked."
         }
     },
     {
@@ -350,12 +350,12 @@ BENCHMARK_CASES = [
             "burns_trauma": False,
             "immunosuppressed": False,
             "on_antibiotics": False,
-            "clinical_notes": "53-year-old male, possible early sepsis from wound infection. PCT 0.72 indeterminate. Clinically stable. Serial measurement planned."
+            "clinical_notes": "53-year-old male, possible early sepsis from wound infection. procalcitonin 0.72 indeterminate. Clinically stable. Serial measurement planned."
         }
     },
 
     # ══════════════════════════════════════════════════════════════════════
-    # CATEGORY 4 — Override Cases (PCT low but clinical override required)
+    # CATEGORY 4 — Override Cases (procalcitonin low but clinical override required)
     # Expected: start / strong
     # ══════════════════════════════════════════════════════════════════════
     {
@@ -380,7 +380,7 @@ BENCHMARK_CASES = [
             "burns_trauma": False,
             "immunosuppressed": False,
             "on_antibiotics": False,
-            "clinical_notes": "45-year-old male, PCT below threshold but hemodynamically unstable. BP 88 systolic. GCS declining. Clinical instability override required."
+            "clinical_notes": "45-year-old male, procalcitonin below threshold but hemodynamically unstable. BP 88 systolic. GCS declining. Clinical instability override required."
         }
     },
     {
@@ -405,7 +405,7 @@ BENCHMARK_CASES = [
             "burns_trauma": False,
             "immunosuppressed": True,
             "on_antibiotics": False,
-            "clinical_notes": "38-year-old female, neutropenic post-chemotherapy (ANC 0.1). PCT low but neutropenic high-risk profile mandates antibiotic initiation."
+            "clinical_notes": "38-year-old female, neutropenic post-chemotherapy (ANC 0.1). procalcitonin low but neutropenic high-risk profile mandates antibiotic initiation."
         }
     },
     {
@@ -431,7 +431,7 @@ BENCHMARK_CASES = [
             "burns_trauma": False,
             "immunosuppressed": False,
             "on_antibiotics": False,
-            "clinical_notes": "82-year-old male, frail elderly, high-risk profile, gray zone PCT. Family reports rapid deterioration over 12 hours."
+            "clinical_notes": "82-year-old male, frail elderly, high-risk profile, gray zone procalcitonin. Family reports rapid deterioration over 12 hours."
         }
     },
 
@@ -462,7 +462,7 @@ BENCHMARK_CASES = [
             "burns_trauma": False,
             "immunosuppressed": False,
             "on_antibiotics": False,
-            "clinical_notes": "66-year-old male, CKD stage 4 (creatinine 3.8). PCT elevated but likely due to reduced renal clearance — interpret with caution."
+            "clinical_notes": "66-year-old male, CKD stage 4 (creatinine 3.8). procalcitonin elevated but likely due to reduced renal clearance — interpret with caution."
         }
     },
     {
@@ -487,7 +487,7 @@ BENCHMARK_CASES = [
             "burns_trauma": False,
             "immunosuppressed": False,
             "on_antibiotics": False,
-            "clinical_notes": "59-year-old female, 24 hours post major abdominal surgery. PCT elevated but non-infectious post-operative elevation expected in first 24-72h."
+            "clinical_notes": "59-year-old female, 24 hours post major abdominal surgery. procalcitonin elevated but non-infectious post-operative elevation expected in first 24-72h."
         }
     },
     {
@@ -512,7 +512,7 @@ BENCHMARK_CASES = [
             "burns_trauma": False,
             "immunosuppressed": True,
             "on_antibiotics": False,
-            "clinical_notes": "44-year-old female, renal transplant on tacrolimus. Pneumonia suspected. PCT may be blunted by immunosuppression — low PCT does not exclude infection."
+            "clinical_notes": "44-year-old female, renal transplant on tacrolimus. Pneumonia suspected. procalcitonin may be blunted by immunosuppression — low procalcitonin does not exclude infection."
         }
     },
     {
@@ -538,12 +538,12 @@ BENCHMARK_CASES = [
             "immunosuppressed": False,
             "on_antibiotics": False,
             "symptom_onset_hours": 4,
-            "clinical_notes": "51-year-old male, symptoms for only 4 hours. Suspected Legionella (travel history to endemic area). PCT may not have risen yet AND atypical pathogen expected to give low PCT."
+            "clinical_notes": "51-year-old male, symptoms for only 4 hours. Suspected Legionella (travel history to endemic area). procalcitonin may not have risen yet AND atypical pathogen expected to give low procalcitonin."
         }
     },
 
     # ══════════════════════════════════════════════════════════════════════
-    # CATEGORY 6 — Kinetic Discontinue (on antibiotics, PCT declined ≥80%)
+    # CATEGORY 6 — Kinetic Discontinue (on antibiotics, procalcitonin declined ≥80%)
     # Expected: stop / strong
     # ══════════════════════════════════════════════════════════════════════
     {
@@ -574,7 +574,7 @@ BENCHMARK_CASES = [
                 {"day": 1, "value": 1.2},
                 {"day": 2, "value": 0.4},
             ],
-            "clinical_notes": "62-year-old male, day 4 of antibiotics for CAP. PCT declined from 2.8 to 0.18 — 94% decline. Clinically improved. Afebrile."
+            "clinical_notes": "62-year-old male, day 4 of antibiotics for CAP. procalcitonin declined from 2.8 to 0.18 — 94% decline. Clinically improved. Afebrile."
         }
     },
     {
@@ -607,7 +607,7 @@ BENCHMARK_CASES = [
                 {"day": 1, "value": 2.1},
                 {"day": 2, "value": 0.8},
             ],
-            "clinical_notes": "70-year-old female, ICU day 5 after sepsis. PCT declined from 4.2 to 0.38 — 91% decline. Clinically recovered. Haemodynamically stable."
+            "clinical_notes": "70-year-old female, ICU day 5 after sepsis. procalcitonin declined from 4.2 to 0.38 — 91% decline. Clinically recovered. Haemodynamically stable."
         }
     },
     {
@@ -637,12 +637,12 @@ BENCHMARK_CASES = [
                 {"day": 0, "value": 1.6},
                 {"day": 1, "value": 0.8},
             ],
-            "clinical_notes": "55-year-old female, day 3 of antibiotics for pneumonia. PCT declined from 1.6 to 0.21 — 87% decline. Below 0.25 threshold. Well and improving."
+            "clinical_notes": "55-year-old female, day 3 of antibiotics for pneumonia. procalcitonin declined from 1.6 to 0.21 — 87% decline. Below 0.25 threshold. Well and improving."
         }
     },
 
     # ══════════════════════════════════════════════════════════════════════
-    # CATEGORY 7 — Treatment Failure (Day 4+, <80% decline or rising PCT)
+    # CATEGORY 7 — Treatment Failure (Day 4+, <80% decline or rising procalcitonin)
     # Expected: escalate / strong
     # ══════════════════════════════════════════════════════════════════════
     {
@@ -675,7 +675,7 @@ BENCHMARK_CASES = [
                 {"day": 1, "value": 4.4},
                 {"day": 2, "value": 3.9},
             ],
-            "clinical_notes": "67-year-old male, day 4 of broad-spectrum antibiotics for sepsis. PCT trending upward then plateau — less than 10% change. Clinically deteriorating. Treatment failure suspected."
+            "clinical_notes": "67-year-old male, day 4 of broad-spectrum antibiotics for sepsis. procalcitonin trending upward then plateau — less than 10% change. Clinically deteriorating. Treatment failure suspected."
         }
     },
     {
@@ -708,7 +708,7 @@ BENCHMARK_CASES = [
                 {"day": 1, "value": 2.0},
                 {"day": 2, "value": 1.8},
             ],
-            "clinical_notes": "74-year-old female, day 4 of antibiotics for CAP. PCT declined only 14% from 2.2 to 1.9 — well below 80% threshold. Persistent fever. Treatment failure criteria met."
+            "clinical_notes": "74-year-old female, day 4 of antibiotics for CAP. procalcitonin declined only 14% from 2.2 to 1.9 — well below 80% threshold. Persistent fever. Treatment failure criteria met."
         }
     },
 

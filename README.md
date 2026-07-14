@@ -4,18 +4,18 @@
 
 # ProcalysAI
 
-Clinical decision support prototype for **PCT-guided antibiotic stewardship** using structured patient inputs, serial procalcitonin kinetics, and a four-agent LLM reasoning pipeline.
+Clinical decision support prototype for **procalcitonin-guided antibiotic stewardship** using structured test subject inputs, serial procalcitonin kinetics, and a four-agent LLM reasoning pipeline.
 
 [GitHub Pages project page](https://fbaakyildiz.github.io/ProcalysAI/)
 
 > **Research only:** ProcalysAI is not a medical device and does not replace clinician judgment.
 
-Project supervision: Claudia Steffen, Sr. Manager for Global Partner and Digital Development, PCT & Licensed Markers at Thermo Fisher Scientific. Contact: claudia.steffen@thermofisher.com.
+Project supervision: Claudia Steffen, Sr. Manager for Global Partner and Digital Development, Procalcitonin and Licensed Markers at Thermo Fisher Scientific. Contact: claudia.steffen@thermofisher.com.
 
 ## Highlights
 
-- PCT threshold interpretation for LRTI and sepsis workflows.
-- Serial PCT kinetic tracking with decline calculation and Day 4 treatment-failure alerting.
+- Procalcitonin threshold interpretation for LRTI and sepsis workflows.
+- Serial procalcitonin kinetic tracking with decline calculation and Day 4 treatment-failure alerting.
 - Multi-agent pipeline: intake, clinical reasoning, kinetic/context analysis, and final report generation.
 - Multi-provider model support for Gemini, OpenAI, Anthropic Claude, and OpenRouter.
 - Prompt-injection controls on clinical notes and hardened system prompts.

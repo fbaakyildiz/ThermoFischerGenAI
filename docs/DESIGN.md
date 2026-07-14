@@ -1,17 +1,17 @@
 # ProcalysAI Design Document
 
-Developer-level architecture and implementation notes for ProcalysAI, a local-first clinical decision support prototype for PCT-guided antibiotic stewardship.
+Developer-level architecture and implementation notes for ProcalysAI, a local-first clinical decision support prototype for procalcitonin-guided antibiotic stewardship.
 
 > Research use only. ProcalysAI is not a medical device and does not replace clinician judgment.
 
 ## 1. Product Overview
 
-ProcalysAI assists clinicians and researchers with procalcitonin (PCT)-guided antibiotic stewardship decisions. The application collects structured patient data, applies B.R.A.H.M.S-style PCT threshold logic through a multi-agent LLM pipeline, and returns a concise stewardship report with recommendation, rationale, warnings, kinetic interpretation, and audit metadata.
+ProcalysAI assists clinicians and researchers with procalcitonin-guided antibiotic stewardship decisions. The application collects structured test subject data, applies B.R.A.H.M.S-style procalcitonin threshold logic through a multi-agent LLM pipeline, and returns a concise stewardship report with recommendation, rationale, warnings, kinetic interpretation, and audit metadata.
 
 Core capabilities:
 
-- PCT threshold interpretation for LRTI and sepsis contexts.
-- Serial PCT kinetic analysis for antibiotic discontinuation and Day 4 treatment-failure alerts.
+- Procalcitonin threshold interpretation for LRTI and sepsis contexts.
+- Serial procalcitonin kinetic analysis for antibiotic discontinuation and Day 4 treatment-failure alerts.
 - Clinical override handling for unstable or high-risk patients.
 - Prompt-injection validation on clinical notes.
 - Multi-provider LLM routing from user-entered API keys.
@@ -85,7 +85,7 @@ Major UI regions:
 
 - API key gate: validates a Gemini, OpenAI, Claude, or OpenRouter key before unlocking the app.
 - Header: ProcalysAI identity, research-only state, detected provider/model status.
-- Input column: PCT hero input, clinical setting, labs, vitals, clinical flags, serial PCT tracking, notes.
+- Input column: procalcitonin hero input, clinical setting, labs, vitals, clinical flags, serial procalcitonin tracking, notes.
 - Result column: placeholder, progress state, final report rendering.
 - Kinetic section: serial measurements, live peak/current/decline calculation, Day 4 alert logic.
 
@@ -236,9 +236,9 @@ Supported clinical settings:
 lrti | sepsis | postop | ed
 ```
 
-### `PCTMeasurement`
+### `ProcalcitoninMeasurement`
 
-Serial PCT measurement object:
+Serial procalcitonin measurement object:
 
 ```json
 {
@@ -305,17 +305,17 @@ Responsibilities:
 
 Responsibilities:
 
-- Apply LRTI or sepsis PCT thresholds.
+- Apply LRTI or sepsis procalcitonin thresholds.
 - Identify gray-zone scenarios.
 - Apply absolute override rules.
-- Produce initiation recommendation and PCT interpretation.
+- Produce initiation recommendation and procalcitonin interpretation.
 
 ### A3: Kinetic and Context Analysis
 
 Responsibilities:
 
-- Process serial PCT values.
-- Calculate peak PCT and percent decline.
+- Process serial procalcitonin values.
+- Calculate peak procalcitonin and percent decline.
 - Identify discontinuation criteria.
 - Detect Day 4 treatment-failure alerts.
 - Adjust recommendation based on comorbidities and treatment state.
@@ -332,18 +332,18 @@ Responsibilities:
 
 ## 8. Clinical Decision Logic
 
-### LRTI PCT Bands
+### LRTI Procalcitonin Bands
 
-| PCT value | Interpretation | Typical recommendation |
+| procalcitonin value | Interpretation | Typical recommendation |
 |---:|---|---|
 | `< 0.10 ng/mL` | Antibiotics strongly discouraged | `withhold` |
 | `0.10-0.25 ng/mL` | Discouraged / gray zone | `clinician_decision` |
 | `0.25-0.50 ng/mL` | Consider antibiotics | `clinician_decision` |
 | `> 0.50 ng/mL` | Strongly encouraged | `start` |
 
-### Sepsis PCT Bands
+### Sepsis Procalcitonin Bands
 
-| PCT value | Interpretation | Typical recommendation |
+| procalcitonin value | Interpretation | Typical recommendation |
 |---:|---|---|
 | `< 0.5 ng/mL` | Low systemic bacterial infection risk | `withhold` |
 | `0.5-2.0 ng/mL` | Indeterminate | `clinician_decision` |
@@ -351,17 +351,17 @@ Responsibilities:
 
 ### Kinetic Rules
 
-When serial PCT measurements are available:
+When serial procalcitonin measurements are available:
 
 - `>= 80%` decline from peak supports discontinuation.
 - `50-79%` decline suggests partial response and reassessment.
 - `< 50%` decline suggests inadequate response.
 - `< 80%` decline on antibiotic Day 4 or later triggers treatment-failure concern.
-- Rising PCT during treatment suggests treatment failure or new source.
+- Rising procalcitonin during treatment suggests treatment failure or new source.
 
 ### Override Rules
 
-PCT thresholds are overridden when:
+Procalcitonin thresholds are overridden when:
 
 - `clinical_unstable = true`
 - `high_risk_patient = true`
@@ -412,7 +412,7 @@ Per-agent metadata:
 After the pipeline completes, the backend logs a structured `pipeline_complete` event containing:
 
 - timestamp
-- PCT value
+- procalcitonin value
 - clinical setting
 - final recommendation
 - gray-zone and review flags
@@ -640,7 +640,7 @@ The benchmark records:
 
 - case id
 - category
-- PCT value
+- procalcitonin value
 - ground truth recommendation
 - model recommendation
 - match status
@@ -667,7 +667,7 @@ Recommended next steps:
 - Add provider/model selector instead of relying only on key-prefix detection.
 - Tighten CORS and local bind defaults.
 - Add automated unit tests for:
-  - PCT band classification
+  - procalcitonin band classification
   - kinetic decline calculations
   - prompt-injection validation
   - A4 recommendation fallback behavior

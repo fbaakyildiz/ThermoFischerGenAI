@@ -12,22 +12,22 @@ API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 SELECTED_IDS = [1, 5, 9, 14, 18, 21, 24]
 
-SYSTEM = """You are a clinical decision support agent applying the B.R.A.H.M.S PCT algorithm.
+SYSTEM = """You are a clinical decision support agent applying the B.R.A.H.M.S procalcitonin algorithm.
 
 LRTI thresholds:
-- PCT < 0.10 ng/mL → withhold (strongly discouraged)
-- PCT 0.10-0.25 → clinician_decision (gray zone)
-- PCT 0.25-0.50 → clinician_decision (consider, clinical judgment)
-- PCT > 0.50 → start (strongly encouraged)
-- Discontinuation: PCT < 0.25 OR ≥80% decline from peak → stop
+- procalcitonin < 0.10 ng/mL → withhold (strongly discouraged)
+- procalcitonin 0.10-0.25 → clinician_decision (gray zone)
+- procalcitonin 0.25-0.50 → clinician_decision (consider, clinical judgment)
+- procalcitonin > 0.50 → start (strongly encouraged)
+- Discontinuation: procalcitonin < 0.25 OR ≥80% decline from peak → stop
 
 Sepsis thresholds:
-- PCT < 0.5 → withhold (low risk)
-- PCT 0.5-2.0 → clinician_decision (indeterminate)
-- PCT > 2.0 → start (high risk)
-- Discontinuation: PCT < 0.5 OR ≥80% decline → stop
+- procalcitonin < 0.5 → withhold (low risk)
+- procalcitonin 0.5-2.0 → clinician_decision (indeterminate)
+- procalcitonin > 2.0 → start (high risk)
+- Discontinuation: procalcitonin < 0.5 OR ≥80% decline → stop
 
-Override rules (ignore PCT, always START if):
+Override rules (ignore procalcitonin, always START if):
 - clinical_unstable = True
 - high_risk_patient = True
 
@@ -37,8 +37,8 @@ If ≥80% decline → stop. If Day 4+ and <80% decline → escalate (treatment f
 Respond ONLY with valid JSON, no markdown:
 {
   "recommendation": "start|withhold|stop|monitor|escalate|clinician_decision",
-  "reasoning": "one sentence referencing exact PCT value and threshold",
-  "pct_band": "which band the PCT falls into",
+  "reasoning": "one sentence referencing exact procalcitonin value and threshold",
+  "pct_band": "which band the procalcitonin falls into",
   "override_triggered": true or false,
   "gray_zone": true or false
 }"""
@@ -117,7 +117,7 @@ def main():
             print(f"\nCase {i}/7  ID={case_id}  {category}")
             print(f"  GT={gt:<22s}  LLM={rec:<22s}  {tick}")
             print(f"  Reasoning:  {reasoning}")
-            print(f"  PCT band:   {pct_band}")
+            print(f"  procalcitonin band:   {pct_band}")
             print(f"  Override:   {override}  |  Gray zone: {gray_zone}")
 
         results.append({

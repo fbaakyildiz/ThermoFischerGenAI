@@ -14,7 +14,7 @@ from pipeline import run_pipeline, validate_api_key, PatientInput, StewardshipRe
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title="PCT Antibiotic Stewardship API", version="1.0.0")
+app = FastAPI(title="Procalcitonin Antibiotic Stewardship API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,

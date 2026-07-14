@@ -44,7 +44,7 @@ class PCTMeasurement(BaseModel):
     @field_validator('date')
     @classmethod
     def sanitize_date(cls, v):
-        return _sanitize_prompt_injection_text(v, "PCT measurement date")
+        return _sanitize_prompt_injection_text(v, "procalcitonin measurement date")
 
 
 class PatientInput(BaseModel):

@@ -252,7 +252,7 @@
       "total_tokens_est": null,
       "total_cost_usd_est": null,
       "total_latency_seconds": null,
-      "error": "HTTP 422: {\"detail\":[{\"type\":\"value_error\",\"loc\":[\"body\",\"clinical_notes\"],\"msg\":\"Value error, Clinical notes contain invalid content. Please enter only clinical observations.\",\"input\":\"45-year-old male, PCT below threshold but hemodynamically unstable. BP 88 systolic. GCS declining. Clinical instability over"
+      "error": "HTTP 422: {\"detail\":[{\"type\":\"value_error\",\"loc\":[\"body\",\"clinical_notes\"],\"msg\":\"Value error, Clinical notes contain invalid content. Please enter only clinical observations.\",\"input\":\"45-year-old male, procalcitonin below threshold but hemodynamically unstable. BP 88 systolic. GCS declining. Clinical instability over"
     },
     {
       "case_id": 15,

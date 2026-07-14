@@ -37,7 +37,7 @@ def run_case(case):
 
 def main():
     print("=" * 70)
-    print("PCT STEWARDSHIP BENCHMARK")
+    print("procalcitonin STEWARDSHIP BENCHMARK")
     print(f"Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 70)
 

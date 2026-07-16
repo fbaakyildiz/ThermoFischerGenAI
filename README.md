@@ -10,7 +10,6 @@ Clinical decision support prototype for **procalcitonin-guided antibiotic stewar
 
 > **Research only:** ProcalysAI is not a medical device and does not replace clinician judgment.
 
-Project supervision: Claudia Steffen, Sr. Manager for Global Partner and Digital Development, Procalcitonin and Licensed Markers at Thermo Fisher Scientific. Contact: claudia.steffen@thermofisher.com.
 
 ## Highlights
 

@@ -35,6 +35,11 @@ async def root():
     return FileResponse("static/index.html")
 
 
+@app.get("/disclaimer")
+async def disclaimer():
+    return FileResponse("DISCLAIMER.md", media_type="text/markdown")
+
+
 @app.post("/api/validate-key")
 async def validate_key(request: ApiKeyRequest):
     try:

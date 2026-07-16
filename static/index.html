@@ -128,7 +128,7 @@ button { cursor: pointer; }
 .brand-title { color: var(--white); font-size: 14px; font-weight: 700; letter-spacing: .02em; }
 .brand-sub { color: rgba(232,237,242,.68); font-size: 12px; }
 .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-.status-pill, .research-pill {
+.status-pill, .research-pill, .disclaimer-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -142,6 +142,13 @@ button { cursor: pointer; }
 }
 .status-pill { color: #BFEFED; border: 1px solid rgba(204,240,238,.28); background: rgba(11,122,117,.18); }
 .research-pill { color: #FCA5A5; border: 1px solid rgba(239,68,68,.38); background: rgba(239,68,68,.13); }
+.disclaimer-link {
+  color: #D6E8F7;
+  border: 1px solid rgba(214,232,247,.32);
+  background: rgba(46,125,212,.16);
+  text-decoration: none;
+}
+.disclaimer-link:hover { border-color: rgba(204,240,238,.58); background: rgba(11,122,117,.24); }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 4px rgba(34,197,94,.13); }
 
 .workspace {
@@ -250,7 +257,15 @@ button { cursor: pointer; }
   letter-spacing: .08em;
   text-transform: uppercase;
 }
-.hero-title { margin-top: 8px; max-width: 530px; font-size: clamp(32px, 4vw, 52px); line-height: .98; letter-spacing: -.025em; }
+.hero-title {
+  max-width: min(100%, 560px);
+  margin-top: 8px;
+  font-size: clamp(30px, 3.6vw, 48px);
+  line-height: 1.03;
+  letter-spacing: -.015em;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
 .hero-text { max-width: 560px; margin-top: 14px; color: rgba(232,237,242,.75); font-size: 14px; }
 .hero-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 24px; }
 .metric {
@@ -1024,6 +1039,7 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
     <div class="top-actions">
       <span class="status-pill"><span class="dot"></span> <span id="llm-status">Model auto-detect</span></span>
       <span class="research-pill">Research only</span>
+      <a class="disclaimer-link" href="/disclaimer" target="_blank" rel="noreferrer">Disclaimer</a>
     </div>
   </header>
 
@@ -1223,7 +1239,7 @@ summary { color: rgba(232,237,242,.62); cursor: pointer; font-size: 12px; font-w
             <strong>Run ProcalysAI Analysis</strong>
             <span>~50 seconds - 4 agents - structured JSON report</span>
           </div>
-          <button type="submit" id="sub-btn" class="run-btn">Analyze Patient</button>
+          <button type="submit" id="sub-btn" class="run-btn">Analyze</button>
         </section>
       </form>
     </section>
@@ -1651,7 +1667,7 @@ $("form").addEventListener("submit", async e => {
     $("err-banner").style.display = "block";
   } finally {
     btn.disabled = false;
-    btn.textContent = "Analyze Patient";
+    btn.textContent = "Analyze";
   }
 });
 
